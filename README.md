@@ -61,7 +61,7 @@ The goals / steps of this project are the following:
 8. Discussion
 
 
-##1. Calibrate the Camera
+## 1. Calibrate the Camera
 *The code for this step is contained in __cell [1] to [4]__ of the IPython notebook located in "./Advanced Lane Finding.ipynb".*
 
 I start by preparing "object points", which will be the (x, y, z) coordinates of the chessboard corners in the world. Here I am assuming the chessboard is fixed on the (x, y) plane at z=0, such that the object points are the same for each calibration image.  Thus, `objp` is just a replicated array of coordinates, and `objpoints` will be appended with a copy of it every time I successfully detect all chessboard corners in a test image.  `imgpoints` will be appended with the (x, y) pixel position of each of the corners in the image plane with each successful chessboard detection.  
@@ -74,7 +74,7 @@ Here is an example of chessboard images with corners drawn:
 
 ---
 
-##2. Correct for Image Distortion
+## 2. Correct for Image Distortion
 *The code for this step is contained in __cell [5] to [8]__ of the IPython notebook located in "./Advanced Lane Finding.ipynb".*
 
 I then used the output `objpoints` and `imgpoints` to compute the camera calibration and distortion coefficients using the `cv2.calibrateCamera()` function.  I applied this distortion correction to the test image using the `cv2.undistort()` function and obtained this result: 
@@ -83,7 +83,7 @@ I then used the output `objpoints` and `imgpoints` to compute the camera calibra
 
 ---
 
-##3. Implement a Color & Gradient Threshold
+## 3. Implement a Color & Gradient Threshold
 *The code for this step is contained in __cell [9] to [31]__ of the IPython notebook located in "./Advanced Lane Finding.ipynb".*
 
 To demonstrate this step, I will describe how I apply the distortion correction to one of the test images like this one:
@@ -180,7 +180,7 @@ Here is a comparison of a test after the implemetion of color & gradient thresho
 
 ---
 
-##4. Warp the Image Using Perspective Transform
+## 4. Warp the Image Using Perspective Transform
 *The code for this step is contained in __cell [32] to [39]__ of the IPython notebook located in "./Advanced Lane Finding.ipynb".*
 
 The code for my perspective transform includes a function called `warper()`, which appears in lines 1 through 8 in the file `example.py` (output_images/examples/example.py) (or, for example, in the 3rd code cell of the IPython notebook).  The `warper()` function takes as inputs an image (`img`), as well as source (`src`) and destination (`dst`) points.  I chose the hardcode the source and destination points in the following manner:
@@ -219,21 +219,21 @@ The `src` and `dst` seemed to be good so I applied them in my `warper()` functio
 
 ---
 
-##5. Decide Which Pixels are Lane Line Pixels
+## 5. Decide Which Pixels are Lane Line Pixels
 *The code for this step is contained in __cell [40] to [48]__ of the IPython notebook located in "./Advanced Lane Finding.ipynb".*
 
-###5.1 Window Fitting
+### 5.1 Window Fitting
 
 The `window_mask` function is used to draw window areas.
 
-####5.1.1 Unidirectional Window Fitting
+#### 5.1.1 Unidirectional Window Fitting
 The `find_window_centroids` function finds all the left and right window centroids for each level in the given binary image. __Note__: the output centroids are ordered from the bottom to the top of the image.
 
 The `mark_centroids()` function find and mark left and right centroids.
 
 ![alt text][image12]
 
-####5.1.2 Bidirectional Window Fitting
+#### 5.1.2 Bidirectional Window Fitting
 As the output images shown above, the `find_window_centroids` works well in the front half part of the levels but tends to be out of order in the back half part of the levels. 
 
 Thus I decide to apply the `find_window_centroids` in both directions (from bottom to top as well as from top to bottom) and choose the better left and right centroids for each level repectively.
@@ -245,7 +245,7 @@ The `better_window_centroids()` function find window centroids in bidirection (b
 
 ![alt text][image21]
 
-###5.2 Find and Plot the Track Line
+### 5.2 Find and Plot the Track Line
 
 The `find_ploty()` function extract left and right line pixel positions to fit a second order polynomial to both, and generate x and y for plotting.
 
@@ -253,10 +253,10 @@ The `find_ploty()` function extract left and right line pixel positions to fit a
 
 ---
 
-##6. Determine the Line Shape and Position
+## 6. Determine the Line Shape and Position
 *The code for this step is contained in __cell [49] to [58]__ of the IPython notebook located in "./Advanced Lane Finding.ipynb".*
 
-###6.1 Measuring Curvature
+### 6.1 Measuring Curvature
 
 To begin with I calculated the curve rad of the left and right lane lines on the bottom of the image. If both curve rads are valid I took the average of them as the lane curvature. If one curve rad was invalid I took the valid one as the lane curvature.
 
@@ -279,7 +279,7 @@ My `measure_curve()` function calculated the curvature of the eight test images 
 |test5|1049.39(m)|1062.38(m)|1055.89(m)|
 |test6|2182.19(m)|697.80(m)|1440.00(m)|
 
-###6.2 Determine Vehicle Position
+### 6.2 Determine Vehicle Position
 
 |Image Name| Position |
 |:---:|:---:|
@@ -296,7 +296,7 @@ My `measure_curve()` function calculated the curvature of the eight test images 
 |test5|Vehicle is 0.04m right of center
 |test6|Vehicle is 0.22m left of center
 
-###6.3 Drawing Lane
+### 6.3 Drawing Lane
 
 My `drawing()` function marks the area betweern the detected left and right lanes with green as below:
 
@@ -308,7 +308,7 @@ My `drawing_lane()` function marks the detected left and right lane lines in red
 
 ---
 
-##7. Output
+## 7. Output
 *The code for this step is contained in __cell [59] to [65]__ of the IPython notebook located in "./Advanced Lane Finding.ipynb".*
 
 The `process_image` function:
@@ -332,7 +332,7 @@ My final output video lacated in "./test\_videos\_output/project\_video.mp4".
 
 I discussed how I made improvements according to my reviewer's advice.
 
-###8.1 Choose line to calculate curvature
+### 8.1 Choose line to calculate curvature
 
 Get rid of nan value in curvature calculation.
 
@@ -379,7 +379,7 @@ def find_ploty():
 ```
 `lane` is a set of nonzero pixel coordinates within each window area while `fitx` is a set of points coordinates for plotting. `fitx` is calculated via `lane` so used `lane` instead of `fitx` could decrease error.
 
-###8.2 Determine Vehicle Position
+### 8.2 Determine Vehicle Position
 
 Change the 'right' and 'left' in 2nd submission:
 
@@ -405,7 +405,7 @@ car_center = x_median * xm_per_pix  # take the image center in x direction as th
 ```  
  
 
-###8.3 Output Video Improvement
+### 8.3 Output Video Improvement
 
 ####8.3.1 Take the snapshot of the problematic frames and analyse them.
 
@@ -448,6 +448,6 @@ array([[1066,  720],
 
 I also changed `xm_per_pix = 3.7/700` to `xm_per_pix = (3.7/700)*(3/4)` since the ratio of the same horizontal distance between lane lines were __(3/4 - 1/4):(5/6 - 1/6) = (1/2) : (2/3) =  3/4__
 
-####8.3.1 Use bidirectional window fitting instead of Unidirectional Window Fitting.
+#### 8.3.1 Use bidirectional window fitting instead of Unidirectional Window Fitting.
 
 See more details in __Part 5.1__
